@@ -65,7 +65,7 @@ public partial class MainWindow : Window
                         // A gomb pozícióját a Margin tulajdonsággal állítjuk be
                         Margin = new Thickness(j * meret, i * meret, 0, 0),
                         HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top
+                        VerticalAlignment = VerticalAlignment.Top,
                     };
                     button.Click += Lepes; //*nevetés Üdvözöllek a Béke Szigetén!
                     gridJatekter.Children.Add(button);
@@ -80,12 +80,88 @@ public partial class MainWindow : Window
     {
         int sorszam = int.Parse((sender as Button).Name.Split('_')[1]);
         int oszlopSzam = int.Parse((sender as Button).Name.Split('_')[2]);
-        jatekter[sorszam, oszlopSzam] = jatekos;
-        JatekterKiir();
-        jatekos = jatekos == "X" ? "O" : "X";
 
+        //if (jatekter[sorszam, oszlopSzam] == "O" && jatekos == "O" || jatekter[sorszam, oszlopSzam] == "X" && jatekos == "X")
+        //{
+        //    MessageBox.Show("Ez a mező már foglalt!");
+        //}
+        //else
+        //{
+            
+        //    jatekter[sorszam, oszlopSzam] = jatekos;
+        //    jatekos = jatekos == "X" ? "O" : "X";
+        //    JatekterKiir();
+        //}
 
+        if (jatekter[sorszam, oszlopSzam] == "O" && jatekos == "O")
+        {
+            MessageBox.Show("Ezt a mezőt már kiválaszottad");
+        }
+        else if (jatekter[sorszam, oszlopSzam] == "O" && jatekos == "X")
+        {
+            MessageBox.Show("Ez a mező már foglalt");
+        }
+        else if (jatekter[sorszam, oszlopSzam] == "X" && jatekos == "O")
+        {
+            MessageBox.Show("Ez a mező már foglalt");
+        }
+        else if (jatekter[sorszam, oszlopSzam] == "X" && jatekos == "X")
+        {
+            MessageBox.Show("Ezt a mezőt már kiválaszottad");
+        }
+        else
+        {
+            jatekter[sorszam, oszlopSzam] = jatekos;
+
+            JatekterKiir();
+            if (Gyozelem())
+            {
+                MessageBox.Show("Győzelem!");
+            }
+            jatekos = jatekos == "X" ? "O" : "X";
+            
+        }
     }
+
+    private bool Gyozelem()
+    {
+        // Vízszintes ellenőrzés
+        for (int i = 0; i < jatekter.GetLength(0); i++)
+        {
+            for (int j = 0; j < jatekter.GetLength(1) - 4; j++)
+            {
+                if (jatekter[i, j] == jatekos && jatekter[i, j + 1] == jatekos && jatekter[i, j + 2] == jatekos)
+                {
+                    return true;
+                }
+            }
+        }
+        // Függőleges ellenőrzés
+        for (int i = 0; i < jatekter.GetLength(0) - 4; i++)
+        {
+            for (int j = 0; j < jatekter.GetLength(1); j++)
+            {
+                if (jatekter[i, j] == jatekos && jatekter[i + 1, j] == jatekos && jatekter[i + 2, j] == jatekos)
+                {
+                    return true;
+                }
+            }
+        }
+        // Átlós ellenőrzés
+        for (int i = 0; i < jatekter.GetLength(0) - 4; i++)
+        {
+            for (int j = 0; j < jatekter.GetLength(1) - 4; j++)
+            {
+                if (jatekter[i, j] == jatekos && jatekter[i + 1, j + 1] == jatekos && jatekter[i + 2, j + 2] == jatekos)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 
     private void Kilepes(object sender, RoutedEventArgs e)
     {
