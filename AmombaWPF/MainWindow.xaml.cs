@@ -26,7 +26,17 @@ public partial class MainWindow : Window
 
     private void UjJatek(object sender, RoutedEventArgs e)
     {        
-        
+        int sorszam = int.Parse(tbxSor.Text);
+        int oszlopSzam = int.Parse(tbxOszlop.Text);
+        jatekter = new string[sorszam, oszlopSzam];
+        for (int i = 0; i < jatekter.GetLength(0); i++)
+        {
+            for (int j = 0; j < jatekter.GetLength(1); j++)
+            {
+                jatekter[i, j] = "";
+            }
+        }
+        JatekterKiir();
     }
 
     private void JatekterKiir()
