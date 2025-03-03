@@ -16,7 +16,7 @@
                 <MenuItem Header="Új" Click="UjJatek"/>
                 <MenuItem Header="Megnyitás"/>
                 <MenuItem Header="Mentés"/>
-                <MenuItem Header="Kilépés"/>
+                <MenuItem Header="Kilépés" Click="Kilepes"/>
             </MenuItem>
             <MenuItem Header="Beállítások">
                 <MenuItem Header="Sorok száma:"/>

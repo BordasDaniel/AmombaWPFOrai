@@ -36,8 +36,6 @@ public partial class MainWindow : Window
                 jatekter[i, j] = "";
             }
         }
-
-        jatekter[0, 0] = "X";
         JatekterKiir();
     }
 
@@ -69,7 +67,7 @@ public partial class MainWindow : Window
                         HorizontalAlignment = HorizontalAlignment.Left,
                         VerticalAlignment = VerticalAlignment.Top
                     };
-                    button.Click += Lepes;
+                    button.Click += Lepes; //*nevetés Üdvözöllek a Béke Szigetén!
                     gridJatekter.Children.Add(button);
                 }
             }
@@ -80,6 +78,25 @@ public partial class MainWindow : Window
 
     private void Lepes(object sender, RoutedEventArgs e)
     {
-        
+        int sorszam = int.Parse((sender as Button).Name.Split('_')[1]);
+        int oszlopSzam = int.Parse((sender as Button).Name.Split('_')[2]);
+        jatekter[sorszam, oszlopSzam] = jatekos;
+        JatekterKiir();
+        jatekos = jatekos == "X" ? "O" : "X";
+
+
+    }
+
+    private void Kilepes(object sender, RoutedEventArgs e)
+    {
+        if (MessageBox.Show("Biztos ki akarsz lépni?", "Kilépés", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
+
+// Házi feladat:
+// Győzelem megnézése
+// Mentés (txt)
+// Betöltés
