@@ -36,12 +36,46 @@ public partial class MainWindow : Window
                 jatekter[i, j] = "";
             }
         }
+
+        jatekter[0, 0] = "X";
         JatekterKiir();
     }
 
     private void JatekterKiir()
     {
-       
+        int meret = 20;
+
+        if (jatekter == null)
+        {
+            MessageBox.Show("Nincs feltöltve a játéktér!");
+            return;
+        }
+        else
+        {
+            gridJatekter.Children.Clear();
+            // A gridJatekter rácshoz gombot adunk
+            for (int i = 0; i < jatekter.GetLength(0); i++)
+            {
+                for (int j = 0; j < jatekter.GetLength(1); j++)
+                {
+                    Button button = new()
+                    {
+                        Name = $"btn_{i}_{j}",
+                        Content = jatekter[i, j],
+                        Width = meret,
+                        Height = meret,
+                        // A gomb pozícióját a Margin tulajdonsággal állítjuk be
+                        Margin = new Thickness(j * meret, i * meret, 0, 0),
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top
+                    };
+                    button.Click += Lepes;
+                    gridJatekter.Children.Add(button);
+                }
+            }
+        }
+
+        
     }
 
     private void Lepes(object sender, RoutedEventArgs e)
