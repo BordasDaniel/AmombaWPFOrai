@@ -54,6 +54,7 @@ public partial class MainWindow : Window
         else
         {
             gridJatekter.Children.Clear();
+
             // A gridJatekter rácshoz gombot adunk
             for (int i = 0; i < jatekter.GetLength(0); i++)
             {
@@ -65,13 +66,12 @@ public partial class MainWindow : Window
                         Content = jatekter[i, j],
                         Width = meret,
                         Height = meret,
-                        // A gomb pozícióját a Margin tulajdonsággal állítjuk be
                         Margin = new Thickness(j * meret, i * meret, 0, 0),
                         HorizontalAlignment = HorizontalAlignment.Left,
                         VerticalAlignment = VerticalAlignment.Top,
                         IsEnabled = true
                     };
-                    button.Click += Lepes; //*nevetés Üdvözöllek a Béke Szigetén!
+                    button.Click += Lepes;
                     gridJatekter.Children.Add(button);
                 }
             }
@@ -118,13 +118,10 @@ public partial class MainWindow : Window
 
     private void Letilt()
     {
-       foreach (var btn in gridJatekter.Children)
-        {
-            if (btn is Button)
-            {
-                (btn as Button).IsEnabled = false;
-            }
-        }
+       foreach (Button btn in gridJatekter.Children)
+       {
+            btn.IsEnabled = false;
+       }
         jatekVege = true;
     }
 
@@ -133,7 +130,7 @@ public partial class MainWindow : Window
         // Vízszintes ellenőrzés
         for (int i = 0; i < jatekter.GetLength(0); i++)
         {
-            for (int j = 0; j < jatekter.GetLength(1) - 4; j++)
+            for (int j = 0; j < jatekter.GetLength(1) - 2; j++)
             {
                 if (jatekter[i, j] == jatekos && jatekter[i, j + 1] == jatekos && jatekter[i, j + 2] == jatekos)
                 {
@@ -142,8 +139,9 @@ public partial class MainWindow : Window
                 }
             }
         }
+
         // Függőleges ellenőrzés
-        for (int i = 0; i < jatekter.GetLength(0) - 4; i++)
+        for (int i = 0; i < jatekter.GetLength(0) - 2; i++)
         {
             for (int j = 0; j < jatekter.GetLength(1); j++)
             {
@@ -154,12 +152,26 @@ public partial class MainWindow : Window
                 }
             }
         }
+
         // Átlós ellenőrzés
-        for (int i = 0; i < jatekter.GetLength(0) - 4; i++)
+        for (int i = 0; i < jatekter.GetLength(0) - 2; i++)
         {
-            for (int j = 0; j < jatekter.GetLength(1) - 4; j++)
+            for (int j = 0; j < jatekter.GetLength(1) - 2; j++)
             {
                 if (jatekter[i, j] == jatekos && jatekter[i + 1, j + 1] == jatekos && jatekter[i + 2, j + 2] == jatekos)
+                {
+                    Letilt();
+                    return true;
+                }
+            }
+        }
+
+        // Átló (ellentétes) ellenőrzés
+        for (int i = 2; i < jatekter.GetLength(0); i++) // 2-től indulunk
+        {
+            for (int j = 0; j < jatekter.GetLength(1) - 2; j++) // -2, mert 3 jelet nézünk
+            {
+                if (jatekter[i, j] == jatekos && jatekter[i - 1, j + 1] == jatekos && jatekter[i - 2, j + 2] == jatekos)
                 {
                     Letilt();
                     return true;
@@ -239,9 +251,9 @@ public partial class MainWindow : Window
                 using (StreamReader olvas = new(fileDialog.FileName))
                 {
 
-                    var xd = olvas.ReadLine();
+                    bool vege = bool.Parse(olvas.ReadLine());
 
-                    olvas.ReadLine(); // Győztes játékos
+                    string gyoztes = olvas.ReadLine();
 
                     int i = 0;
                     int j = 0;
@@ -256,10 +268,11 @@ public partial class MainWindow : Window
                         i++;
                         j = 0;
                     }
-                    JatekterKiir();
+                    JatekterKiir(); 
 
-                    if (bool.Parse(xd))
+                    if (vege)
                     {
+                        MessageBox.Show(gyoztes);
                         Letilt();
                     }
                     else
